@@ -1,0 +1,21 @@
+---
+- name: Add resource pool to vCenter.
+  community.vmware.vmware_resource_pool:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    cluster: "{{ vcenter_cluster }}"
+    resource_pool: "{{ customer | lower }}-{{ environments | lower }}-{{ group_names[-1] | lower }}-{{ group_names[0] | lower }}"
+    mem_shares: "{{ vcenter_resource_pool.mem_shares | default('normal') }}"
+    mem_limit: "{{ vcenter_resource_pool.mem_limit | default(-1) }}"
+    mem_reservation: "{{ vcenter_resource_pool.mem_reservation | default(0) }}"
+    mem_expandable_reservations: "{{ vcenter_resource_pool.mem_expandable_reservations | default(true) | bool }}"
+    cpu_shares: "{{ vcenter_resource_pool.cpu_shares | default('normal') }}"
+    cpu_limit: "{{ vcenter_resource_pool.cpu_limit | default(-1) }}"
+    cpu_reservation: "{{ vcenter_resource_pool.cpu_reservation | default(0) }}"
+    cpu_expandable_reservations: "{{ vcenter_resource_pool.cpu_expandable_reservations | default(true) | bool }}"
+    validate_certs: false
+    state: present
+  run_once: true
+  delegate_to: localhost

@@ -1,2 +1,35 @@
+# VMware vCenter parameters
 ---
-# defaults file for ansible-role-vmware-guest
+vcenter_hostname: "vcenter.esxi.lab"
+vcenter_username: "administrator@vsphere.local"
+vcenter_password: "password"
+vcenter_datacenter: "cn-north-1"
+vcenter_cluster: "infra"
+#vcenter_resource_pool:
+#  mem_shares: "normal"
+#  mem_limit: -1
+#  mem_reservation: 0
+#  mem_expandable_reservations: true
+#  cpu_shares: "normal"
+#  cpu_limit: -1
+#  cpu_reservation: 0
+#  cpu_expandable_reservations: true
+
+# General parameters
+environments: "dev"
+datacenter: "home"
+domain: "local"
+customer: "infra"
+
+# Virtual machine parameters
+vm_cpucount: "2"
+vm_memory: "4"
+vm_password: "password"
+vm_datastore: "ds-san-lun0"
+vm_disktype: "thin"
+vm_dns_server: ["192.168.0.1"]
+vm_gateway: "192.168.0.1"
+vm_netmask: "255.255.255.0"
+vm_network: "Guest"
+vm_template: "template_Rocky8"
+vm_tags: ["region", "zone"]

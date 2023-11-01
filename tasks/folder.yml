@@ -1,0 +1,51 @@
+---
+- name: Create a VM parent folder on given datacenter.
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder_name: "{{ customer | lower }}"
+    folder_type: vm
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+
+- name: Create a VM secondary folder on given datacenter.
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    parent_folder: "{{ customer | lower }}"
+    folder_name: "{{ environments | lower }}"
+    folder_type: vm
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+
+- name: Create a VM third folder on given datacenter.
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    parent_folder: "{{ customer | lower }}/{{ environments | lower }}"
+    folder_name: "{{ group_names[-1] | lower }}"
+    folder_type: vm
+    validate_certs: false
+    state: present
+  delegate_to: localhost
+
+- name: Create a VM fourth folder on given datacenter.
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    parent_folder: "{{ customer | lower }}/{{ environments | lower }}/{{ group_names[-1] | lower }}"
+    folder_name: "{{ group_names[0] | lower }}"
+    folder_type: vm
+    validate_certs: false
+    state: present
+  delegate_to: localhost

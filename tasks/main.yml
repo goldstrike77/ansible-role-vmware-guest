@@ -1,2 +1,27 @@
 ---
-# tasks file for ansible-role-vmware-guest
+- name: Gather guest VM facts from VMware vCenter.
+  community.vmware.vmware_guest_info:
+    name: "{{ inventory_hostname | lower }}"
+    folder: "{{ vcenter_datacenter }}/vm/{{ customer | lower }}/{{ environments | lower }}/{{ group_names[-1] | lower }}/{{ group_names[0] | lower }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    validate_certs: false
+  delegate_to: localhost
+  changed_when: false
+  failed_when: false
+  register: vm_guest_facts
+  no_log: true
+
+- name: Virtual machines operation.
+  block:
+    - name: Manage VMware vSphere resource pools.
+      include: "resource_pool.yml"
+      when: vcenter_resource_pool is defined
+    - name: Manage folders on given datacenter.
+      include: "folder.yml"
+  when: vm_guest_facts.instance is not defined
+
+- name: Manages virtual machines in vCenter.
+  include: "guest.yml"
