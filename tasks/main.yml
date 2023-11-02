@@ -1,4 +1,10 @@
 ---
+- name: Manage VMware vSphere resource pools.
+  include: "resource_pool.yml"
+
+- name: Manage folders on given datacenter.
+  include: "folder.yml"
+
 - name: Gather guest VM facts from VMware vCenter.
   community.vmware.vmware_guest_info:
     name: "{{ inventory_hostname | lower }}"
@@ -14,14 +20,39 @@
   register: vm_guest_facts
   no_log: true
 
-- name: Virtual machines operation.
-  block:
-    - name: Manage VMware vSphere resource pools.
-      include: "resource_pool.yml"
-      when: vcenter_resource_pool is defined
-    - name: Manage folders on given datacenter.
-      include: "folder.yml"
-  when: vm_guest_facts.instance is not defined
-
 - name: Manages virtual machines in vCenter.
   include: "guest.yml"
+  when: vm_guest_facts.instance is not defined
+
+- name: Add tags to a virtual machine.
+  community.vmware.vmware_tag_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    tag_names: "{{ vm_tags }}"
+    object_name: "{{ inventory_hostname | lower }}"
+    object_type: VirtualMachine
+    state: add
+    validate_certs: false
+  delegate_to: localhost
+  when: vm_tags is defined
+
+- name: Manage disks related to virtual machine.
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: "{{ vcenter_datacenter }}/vm/{{ customer | lower }}/{{ environments | lower }}/{{ group_names[-1] | lower }}/{{ group_names[0] | lower }}"
+    name: "{{ inventory_hostname | lower }}"
+    disk:
+      - size_gb: "{{ item.size_gb }}"
+        type: "{{ item.type | default('thin') }}"
+        datastore: "{{ vm_datastore }}"
+        controller_number: "{{ item.controller_number | default(0) }}"
+        controller_type: "{{ item.controller_type | default('paravirtual') }}"
+        state: present
+        unit_number: "{{ item.unit_number }}"
+    validate_certs: false
+  loop: "{{ vm_disks }}"
+  delegate_to: localhost
