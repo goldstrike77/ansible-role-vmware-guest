@@ -26,7 +26,6 @@ vm_cpucount: "2"
 vm_memory: "4"
 vm_password: "password"
 vm_datastore: "ds-san-lun0"
-vm_disktype: "thin"
 vm_dns_server: ["192.168.0.1"]
 vm_gateway: "192.168.0.1"
 vm_netmask: "255.255.255.0"
