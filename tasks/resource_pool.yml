@@ -17,5 +17,6 @@
     cpu_expandable_reservations: "{{ vcenter_resource_pool.cpu_expandable_reservations | default(true) | bool }}"
     validate_certs: false
     state: present
-  run_once: true
   delegate_to: localhost
+  changed_when: false
+  failed_when: false
