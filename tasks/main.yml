@@ -67,3 +67,4 @@
     validate_certs: false
   loop: "{{ vm_disks }}"
   delegate_to: localhost
+  when: vm_disks is defined
