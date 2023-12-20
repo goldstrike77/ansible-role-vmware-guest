@@ -7,7 +7,7 @@
     datacenter: "{{ vcenter_datacenter }}"
     cluster: "{{ vcenter_cluster }}"
     datastore: "{{ vm_datastore }}"
-    resource_pool: "{% if vm_rp_info | json_query('*.name') | length > 0 %}rg-{{ customer | lower }}-{{ environments | lower }}-{{ group_names[-1] | lower }}-{{ group_names[0] | lower }}{% endif %}"
+    resource_pool: "{% if vm_rp_info | json_query('*.name') | length > 0 %}rp-{{ customer | lower }}-{{ environments | lower }}-{{ group_names[-1] | lower }}-{{ group_names[0] | lower }}{% endif %}"
     folder: "{{ customer | lower }}/{{ environments | lower }}/{{ group_names[-1] | lower }}/{{ group_names[0] | lower }}"
     name: "{{ inventory_hostname | lower }}"
     template: "{{ vm_template }}"
