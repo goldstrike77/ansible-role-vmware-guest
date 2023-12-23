@@ -1,5 +1,5 @@
 ---
-- name: Create a VM parent folder on given datacenter.
+- name: Create customer folder on given datacenter.
   community.vmware.vcenter_folder:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -11,7 +11,7 @@
     state: present
   delegate_to: localhost
 
-- name: Create a VM secondary folder on given datacenter.
+- name: Create environment folder on given datacenter.
   community.vmware.vcenter_folder:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -24,7 +24,7 @@
     state: present
   delegate_to: localhost
 
-- name: Create a VM third folder on given datacenter.
+- name: Create project folder on given datacenter.
   community.vmware.vcenter_folder:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -37,7 +37,7 @@
     state: present
   delegate_to: localhost
 
-- name: Create a VM fourth folder on given datacenter.
+- name: Create group folder on given datacenter.
   community.vmware.vcenter_folder:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
