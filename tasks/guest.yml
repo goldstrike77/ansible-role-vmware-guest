@@ -1,4 +1,14 @@
 ---
+- name: Gather resource pool info about all resource pools available.
+  community.vmware.vmware_resource_pool_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+  register: vm_rp_info
+  delegate_to: localhost
+  run_once: true
+
 - name: Clone a virtual machine from template.
   community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
@@ -7,7 +17,7 @@
     datacenter: "{{ vcenter_datacenter }}"
     cluster: "{{ vcenter_cluster }}"
     datastore: "{{ vm_datastore }}"
-    resource_pool: "{% if vm_rp_info | json_query('*.name') | length > 0 %}rp-{{ customer | lower }}-{{ environments | lower }}-{{ group_names[-1] | lower }}-{{ group_names[0] | lower }}{% endif %}"
+    resource_pool: "{% if vm_rp_info.resource_pool_info | json_query('[*].name') | length > 1 %}rp-{{ customer | lower }}-{{ environments | lower }}-{{ group_names[-1] | lower }}-{{ group_names[0] | lower }}{% endif %}"
     folder: "{{ customer | lower }}/{{ environments | lower }}/{{ group_names[-1] | lower }}/{{ group_names[0] | lower }}"
     name: "{{ inventory_hostname | lower }}"
     template: "{{ vm_template }}"

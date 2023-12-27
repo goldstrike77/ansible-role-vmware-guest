@@ -1,6 +1,7 @@
 ---
 - name: Manage VMware vSphere resource pools.
   include: "resource_pool.yml"
+  run_once: true
 
 - name: Manage folders on given datacenter.
   include: "folder.yml"

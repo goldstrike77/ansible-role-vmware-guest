@@ -18,6 +18,5 @@
     validate_certs: false
     state: present
   delegate_to: localhost
-  register: vm_rp_info
   changed_when: false
   failed_when: false
